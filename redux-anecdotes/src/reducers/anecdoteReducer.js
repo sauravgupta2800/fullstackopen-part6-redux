@@ -33,6 +33,9 @@ const reducer = (state = initialState, action) => {
         return item;
       });
     }
+    case "NEW_ENTRY": {
+      return state.concat(action.data);
+    }
     default:
       return state;
   }
@@ -42,6 +45,13 @@ export const doVote = (id) => {
   return {
     type: "DO_VOTE",
     data: { id },
+  };
+};
+
+export const createNewEntry = (content = "") => {
+  return {
+    type: "NEW_ENTRY",
+    data: asObject(content),
   };
 };
 
