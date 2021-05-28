@@ -5,11 +5,9 @@ const NewForm = () => {
   const dispatch = useDispatch();
 
   const createEntry = (event) => {
-    console.log(event);
     event.preventDefault();
     const content = event.target.content.value;
     event.target.content.value = "";
-    // console.log("content: ", content);
     dispatch(createNewEntry(content));
   };
 
