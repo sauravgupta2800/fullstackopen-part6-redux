@@ -8,12 +8,16 @@ import {
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector(({ anecdotes }) =>
-    anecdotes.sort((firstEl, secondEl) => {
-      if (firstEl.votes > secondEl.votes) return -1;
-      if (firstEl.votes < secondEl.votes) return 1;
-      return 0;
-    })
+  const anecdotes = useSelector(({ anecdotes, searchKey }) =>
+    anecdotes
+      .sort((firstEl, secondEl) => {
+        if (firstEl.votes > secondEl.votes) return -1;
+        if (firstEl.votes < secondEl.votes) return 1;
+        return 0;
+      })
+      .filter(({ content }) =>
+        content.toLowerCase().includes(searchKey.toLowerCase())
+      )
   );
 
   const vote = (id, content) => {
