@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { doVote } from "../reducers/anecdoteReducer";
+import { doVote, setInit } from "../reducers/anecdoteReducer";
 import {
   showNotification,
   hideNotification,
 } from "./../reducers/notificationReducer";
-
+import anecdoteServices from "../services/anecdote";
 const AnecdoteList = () => {
   const dispatch = useDispatch();
   const anecdotes = useSelector(({ anecdotes, searchKey }) =>
@@ -16,9 +16,15 @@ const AnecdoteList = () => {
         return 0;
       })
       .filter(({ content }) =>
-        content.toLowerCase().includes(searchKey.toLowerCase())
+        content.toLowerCase().includes(searchKey.toLowerCase().trim())
       )
   );
+
+  useEffect(() => {
+    anecdoteServices.getAll().then((anecdotes) => {
+      dispatch(setInit(anecdotes));
+    });
+  }, []);
 
   const vote = (id, content) => {
     dispatch(doVote(id));
