@@ -8,17 +8,20 @@ const reducer = (state = "", action) => {
   }
 };
 
-export const showNotification = (message) => {
-  return {
-    type: "SET_NOTIFICATION",
-    notification: message,
-  };
-};
-
-export const hideNotification = () => {
-  return {
-    type: "SET_NOTIFICATION",
-    notification: "",
+export const setNotification = (message, time = 1) => {
+  return (dispatch) => {
+    dispatch({
+      type: "SET_NOTIFICATION",
+      notification: message,
+    });
+    setTimeout(
+      () =>
+        dispatch({
+          type: "SET_NOTIFICATION",
+          notification: "",
+        }),
+      time * 1000
+    );
   };
 };
 

@@ -7,8 +7,7 @@ const reducer = (state = [], action) => {
       return state.map((item) => {
         if (item.id === id) {
           return {
-            ...item,
-            votes: item.votes + 1,
+            ...action.data,
           };
         }
         return item;
@@ -17,7 +16,7 @@ const reducer = (state = [], action) => {
     case "NEW_ENTRY": {
       return state.concat(action.data);
     }
-    case "INIT_ACECDOTES": {
+    case "INIT_ANECDOTES": {
       return action.data;
     }
     default:
@@ -25,35 +24,33 @@ const reducer = (state = [], action) => {
   }
 };
 
-export const doVote = (id) => {
-  return {
-    type: "DO_VOTE",
-    data: { id },
-  };
-};
-
-export const createNewEntry = (anecdote) => {
-  return {
-    type: "NEW_ENTRY",
-    data: anecdote,
-  };
-};
-
-export const setInit = (data) => {
-  return {
-    type: "INIT_ACECDOTES",
-    data,
-  };
-};
-
 export const initializeAnecdotes = () => {
   return async (dispatch) => {
     const anevdotes = await anecdoteService.getAll();
     dispatch({
-      type: "NEW_ENTRY",
+      type: "INIT_ANECDOTES",
       data: anevdotes,
     });
   };
 };
 
+export const createNewAnecdote = (content) => {
+  return async (dispatch) => {
+    const anecdote = await anecdoteService.create(content);
+    dispatch({
+      type: "NEW_ENTRY",
+      data: anecdote,
+    });
+  };
+};
+
+export const doVote = (id, objectData) => {
+  return async (dispatch) => {
+    const anecdote = await anecdoteService.update(id, objectData);
+    dispatch({
+      type: "DO_VOTE",
+      data: anecdote,
+    });
+  };
+};
 export default reducer;
