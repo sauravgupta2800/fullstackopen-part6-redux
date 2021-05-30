@@ -14,14 +14,15 @@ export const setNotification = (message, time = 1) => {
       type: "SET_NOTIFICATION",
       notification: message,
     });
-    setTimeout(
-      () =>
-        dispatch({
-          type: "SET_NOTIFICATION",
-          notification: "",
-        }),
-      time * 1000
-    );
+    let timeoutId = null;
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      dispatch({
+        type: "SET_NOTIFICATION",
+        notification: "",
+      });
+      clearTimeout(timeoutId);
+    }, time * 1000);
   };
 };
 
